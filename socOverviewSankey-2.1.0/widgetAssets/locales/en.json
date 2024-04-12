@@ -1,7 +1,7 @@
 {
     "socOverviewSankey": {
-        "HEADER_ADD_CHART":"Add SOC Overview Sankey Chart",
-        "HEADER_EDIT_CHART":"Edit SOC Overview Sankey Chart",
+        "HEADER_ADD_CHART":"Add Sankey Chart",
+        "HEADER_EDIT_CHART":"Edit Sankey Chart",
         "LABEL_TITLE": "Title",
         "LABEL_DATASOURCE":"Data Source",
         "LABEL_RECORD_CONTAINING_JSON_DATA":"Record Containing JSON Data",
@@ -17,7 +17,7 @@
         "LABEL_SELECT_SOURCE_NODE":"Select Source Node",
         "LABEL_TARGET_NODE":"Target Node",
         "LABEL_SELECT_TARGET_NODE":"Select Target Node",
-        "LABEL_TARGET_NODE_PICKLIST":"Target Node Picklist",
+        "LABEL_TARGET_NODE_FIELD":"Target Node Field",
         "LABEL_SELECT_PICKLIST":"Select Picklist",
         "LABEL_RESOURCE":"Resource",
         "BUTTON_ADD_LAYER":"Add Layer",
@@ -35,6 +35,7 @@
         "TOOLTIP_JSON_RECORD_FIELD":"This widget requires only one JSON record to work hence It is recommended to apply a filter, in case of multiple records first record will be assumed",
         "MESSAGE_NO_RECORDS_FOUND":"No records found!",
         "MESSAGE_NO_NODES_LINKS":"Nodes and Links not created by the given data!",
-        "MESSAGE_LINKED":"Linked"
+        "MESSAGE_LINKED":"Linked",
+        "RECORD_SIZE_LABEL":"Number of records to be fetched"
     }
 }

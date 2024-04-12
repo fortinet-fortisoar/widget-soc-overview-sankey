@@ -1,7 +1,7 @@
 {
     "socOverviewSankey": {
-        "HEADER_ADD_CHART": " SOC概要サンキーチャートを追加する",
-        "HEADER_EDIT_CHART": "SOC概要サンキーチャートを編集する",
+        "HEADER_ADD_CHART": "サンキーチャートを追加する",
+        "HEADER_EDIT_CHART": "サンキーチャートの編集",
         "LABEL_TITLE": "タイトル",
         "LABEL_DATASOURCE": "データソース",
         "LABEL_RECORD_CONTAINING_JSON_DATA": "JSONデータを含むレコード",
@@ -17,7 +17,7 @@
         "LABEL_SELECT_SOURCE_NODE": "ソースノードを選択",
         "LABEL_TARGET_NODE": "ターゲットノード",
         "LABEL_SELECT_TARGET_NODE": "ターゲットノードを選択",
-        "LABEL_TARGET_NODE_PICKLIST": "ターゲットノードのピックリスト",
+        "LABEL_TARGET_NODE_FIELD": "ターゲットノードフィールド",
         "LABEL_SELECT_PICKLIST": "ピックリストを選択",
         "LABEL_RESOURCE": "リソース",
         "BUTTON_ADD_LAYER": "レイヤーを追加",
@@ -35,6 +35,7 @@
         "TOOLTIP_JSON_RECORD_FIELD":"このウィジェットは動作に1つのJSONレコードのみが必要です。したがって、複数のレコードがある場合は、最初のレコードが仮定されます。フィルターを適用することが推奨されます。",
         "MESSAGE_NO_RECORDS_FOUND":"レコードが見つかりませんでした !",
         "MESSAGE_NO_NODES_LINKS":"指定されたデータによって作成されなかったノードとリンク !",
-        "MESSAGE_LINKED":"リンクされた"
+        "MESSAGE_LINKED":"リンクされた",
+        "RECORD_SIZE_LABEL":"取得するレコードの数"
     }
 }

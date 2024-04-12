@@ -1,7 +1,7 @@
 {
     "socOverviewSankey": {
-        "HEADER_ADD_CHART":"添加 SOC 概览桑基图",
-        "HEADER_EDIT_CHART":" 编辑 SOC 概览桑基图",
+        "HEADER_ADD_CHART":"添加桑基图",
+        "HEADER_EDIT_CHART":"编辑桑基图",
         "LABEL_TITLE": "标题",
         "LABEL_DATASOURCE": "数据源",
         "LABEL_RECORD_CONTAINING_JSON_DATA": "包含 JSON 数据的记录",
@@ -17,7 +17,7 @@
         "LABEL_SELECT_SOURCE_NODE": "选择源节点",
         "LABEL_TARGET_NODE": "目标节点",
         "LABEL_SELECT_TARGET_NODE": "选择目标节点",
-        "LABEL_TARGET_NODE_PICKLIST": "目标节点下拉列表",
+        "LABEL_TARGET_NODE_FIELD": "目标节点字段",
         "LABEL_SELECT_PICKLIST": "选择下拉列表",
         "LABEL_RESOURCE":"资源",
         "BUTTON_ADD_LAYER": "添加图层",
@@ -35,6 +35,7 @@
         "TOOLTIP_JSON_RECORD_FIELD":"此小部件仅需要一个 JSON 记录才能工作。因此，在存在多个记录的情况下，将假定第一个记录。建议应用过滤器。",
         "MESSAGE_NO_RECORDS_FOUND":"未找到记录 !",
         "MESSAGE_NO_NODES_LINKS":"未由提供的数据创建的节点和链接 !",
-        "MESSAGE_LINKED":"链接的"
+        "MESSAGE_LINKED":"链接的",
+        "RECORD_SIZE_LABEL":"要获取的记录数"
     }
 }

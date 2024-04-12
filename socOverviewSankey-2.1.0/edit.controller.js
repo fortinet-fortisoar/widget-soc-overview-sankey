@@ -6,11 +6,11 @@
   (function () {
     angular
       .module('cybersponse')
-      .controller('editSocOverviewSankey200Ctrl', editSocOverviewSankey200Ctrl);
+      .controller('editSocOverviewSankey210Ctrl', editSocOverviewSankey210Ctrl);
   
-    editSocOverviewSankey200Ctrl.$inject = ['$scope', '$uibModalInstance', 'config', 'appModulesService', 'Entity', 'modelMetadatasService', 'widgetUtilityService', '$timeout', '$filter'];
+    editSocOverviewSankey210Ctrl.$inject = ['$scope', '$uibModalInstance', 'config', 'appModulesService', 'Entity', 'modelMetadatasService', 'widgetUtilityService', '$timeout', '$filter', 'ALL_RECORDS_SIZE'];
   
-    function editSocOverviewSankey200Ctrl($scope, $uibModalInstance, config, appModulesService, Entity, modelMetadatasService, widgetUtilityService, $timeout, $filter) {
+    function editSocOverviewSankey210Ctrl($scope, $uibModalInstance, config, appModulesService, Entity, modelMetadatasService, widgetUtilityService, $timeout, $filter, ALL_RECORDS_SIZE) {
       $scope.cancel = cancel;
       $scope.save = save;
       $scope.config = config;
@@ -28,6 +28,15 @@
       $scope.addSubTargetType = addSubTargetType;
       $scope.config.entityTrackable = true;
       $scope.config.layers = $scope.config.layers || [];
+      $scope.maxlayers = false;
+      //to fetch no of records in API response
+      $scope.recordSize = [{
+        'name':'30', 
+        'value':30
+      },{
+        'name':'ALL RECORDS', 
+        'value':ALL_RECORDS_SIZE
+      }];
       if ($scope.config.layers.length === 0) {
          insertLayerObject();
       }
@@ -66,6 +75,7 @@
       function loadModules() {
         appModulesService.load(true).then(function (modules) {
           $scope.modules = modules;
+          
           //Create a list of modules with atleast one JSON field
           $scope.modules.forEach((module) => {
             var moduleMetaData = modelMetadatasService.getMetadataByModuleType(module.type);
@@ -99,7 +109,8 @@
           targetNodeField: null,
           targetNodeSubField: null,
           targetNodeType: null,
-          targetNodeSubType: null
+          targetNodeSubType: null,
+          targetNodeModule: null
         });
       }
   
@@ -116,7 +127,7 @@
             return field.type === 'text';
           });
           $scope.params.selectedTargetNodeFields = _.filter($scope.params['formFields'], function (field) {
-            return field.type === 'text' || field.type === 'picklist';
+            return field.type === 'text' || field.type === 'picklist' || field.type === 'manyToMany';
           });
           $scope.params.extendedTargetNodeFields = angular.extend($scope.params.selectedTargetNodeFields, $scope.params.relationshipFieldsArray);
           $scope.params.targetNodeFields = _.sortBy($scope.params.extendedTargetNodeFields, 'name');
@@ -142,20 +153,21 @@
   
       //Check if target is picklist or manyToMany
       function checkTargetType(_index) {
-        let isPicklist = _.filter($scope.params.targetNodeFields, function (field) {
+        let _currentTargetData = _.filter($scope.params.targetNodeFields, function (field) {
           return field.name === $scope.config.layers[_index].targetNodeField
         });
-        if (isPicklist.length > 0 && isPicklist[0]['type'] === 'manyToMany') {
-          var targetEntity = new Entity($scope.config.layers[_index].targetNodeField);
+        if (_currentTargetData && _currentTargetData.length > 0 && (_currentTargetData[0]['type'] === 'manyToMany' || _currentTargetData[0]['type'] === 'picklist')) {
+          var targetEntity = new Entity(_currentTargetData[0]['module']);
           targetEntity.loadFields().then(function () {
             $scope.params.targetFormField = targetEntity.getFormFieldsArray();
             $scope.params['targetNodesSubFields_' + _index] = _.filter($scope.params.targetFormField, function (field) {
-              return field.type === 'picklist';
+              return field.type === 'picklist' || field.type === 'text';
             });
             $scope.params['targetNodesSubFields_' + _index] = _.sortBy($scope.params['targetNodesSubFields_' + _index], 'name');
           });
         }
-        $scope.config.layers[_index]['targetNodeType'] = isPicklist[0]['type'];
+        $scope.config.layers[_index]['targetNodeType'] = _currentTargetData[0]['type'];
+        $scope.config.layers[_index]['targetNodeModule'] = _currentTargetData[0]['module'];
       }
   
       //to check the subtarget type
@@ -205,7 +217,7 @@
               LABEL_SELECT_SOURCE_NODE: widgetUtilityService.translate('socOverviewSankey.LABEL_SELECT_SOURCE_NODE'),
               LABEL_TARGET_NODE: widgetUtilityService.translate('socOverviewSankey.LABEL_TARGET_NODE'),
               LABEL_SELECT_TARGET_NODE: widgetUtilityService.translate('socOverviewSankey.LABEL_SELECT_TARGET_NODE'),
-              LABEL_TARGET_NODE_PICKLIST: widgetUtilityService.translate('socOverviewSankey.LABEL_TARGET_NODE_PICKLIST'),
+              LABEL_TARGET_NODE_FIELD: widgetUtilityService.translate('socOverviewSankey.LABEL_TARGET_NODE_FIELD'),
               LABEL_SELECT_PICKLIST: widgetUtilityService.translate('socOverviewSankey.LABEL_SELECT_PICKLIST'),
               LABEL_RESOURCE: widgetUtilityService.translate('socOverviewSankey.LABEL_RESOURCE'),
               BUTTON_ADD_LAYER: widgetUtilityService.translate('socOverviewSankey.BUTTON_ADD_LAYER'),
@@ -218,7 +230,8 @@
               TOOLTIP_JSON_SELECT_MODULE: widgetUtilityService.translate('socOverviewSankey.TOOLTIP_JSON_SELECT_MODULE'),
               TOOLTIP_JSON_TYPE_DATA: widgetUtilityService.translate('socOverviewSankey.TOOLTIP_JSON_TYPE_DATA'),
               TOOLTIP_JSON_RECORD_FIELD: widgetUtilityService.translate('socOverviewSankey.TOOLTIP_JSON_RECORD_FIELD'),
-              MESSAGE_LINKED: widgetUtilityService.translate('socOverviewSankey.MESSAGE_LINKED')
+              MESSAGE_LINKED: widgetUtilityService.translate('socOverviewSankey.MESSAGE_LINKED'),
+              RECORD_SIZE_LABEL : widgetUtilityService.translate('socOverviewSankey.RECORD_SIZE_LABEL')
             };
             $scope.header = $scope.config.title ? $scope.viewWidgetVars.HEADER_EDIT_CHART : $scope.viewWidgetVars.HEADER_ADD_CHART;
             loadModules();

@@ -1,7 +1,7 @@
 {
     "socOverviewSankey": {
-        "HEADER_ADD_CHART":"SOC 개요 산키 차트 추가",
-        "HEADER_EDIT_CHART":"SOC 개요 샌키 차트 편집",
+        "HEADER_ADD_CHART":"샌키 차트 추가",
+        "HEADER_EDIT_CHART":"산키 차트 편집",
         "LABEL_TITLE": "제목",
         "LABEL_DATASOURCE": "데이터 원본",
         "LABEL_RECORD_CONTAINING_JSON_DATA": "JSON 데이터를 포함하는 레코드",
@@ -17,7 +17,7 @@
         "LABEL_SELECT_SOURCE_NODE": "소스 노드 선택",
         "LABEL_TARGET_NODE": "대상 노드",
         "LABEL_SELECT_TARGET_NODE": "대상 노드 선택",
-        "LABEL_TARGET_NODE_PICKLIST": "대상 노드 픽리스트",
+        "LABEL_TARGET_NODE_FIELD": "대상 노드 필드",
         "LABEL_SELECT_PICKLIST": "픽리스트 선택",
         "LABEL_RESOURCE":"자원",
         "BUTTON_ADD_LAYER": "레이어 추가",
@@ -35,6 +35,7 @@
         "TOOLTIP_JSON_RECORD_FIELD":"이 위젯은 작동에 한 개의 JSON 레코드만 필요합니다. 따라서 여러 개의 레코드가있는 경우 첫 번째 레코드가 가정됩니다. 필터를 적용하는 것이 권장됩니다.",
         "MESSAGE_NO_RECORDS_FOUND":"레코드를 찾을 수 없습니다 !",
         "MESSAGE_NO_NODES_LINKS":"주어진 데이터로 생성되지 않은 노드 및 링크 !",
-        "MESSAGE_LINKED":"링크된"
+        "MESSAGE_LINKED":"링크된",
+        "RECORD_SIZE_LABEL":"불러올 레코드 수"
     }
 }
