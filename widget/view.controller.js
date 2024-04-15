@@ -202,6 +202,8 @@
           for (let c = 0; c < seriesNameArray.length; c++) {
             if (link[seriesNameArray[c]] && link[seriesNameArray[c + 1]]) {
               let _currentSource = _.filter(nodesMap, { 'name': link[seriesNameArray[c]] + '_' + _linkNo })[0]['idIndex'];
+              let _currentTarget = _.filter(nodesMap, { 'name': link[seriesNameArray[c + 1]] + '_' + (Number(_linkNo) + 1) })[0]['idIndex'];
+
               //check if current node source id is present in target id to avoid the shifting of nodes to extreme left
               if (Number(_linkNo) !== 0) {
                 let targetPresent = _.filter(links, function (_data) {
@@ -237,10 +239,11 @@
                 }
               }
               //create link data with source,target and value
+              // add value as 0 if source or target has NA(null) values
               let linkData = {
-                "source": _.filter(nodesMap, { 'name': link[seriesNameArray[c]] + '_' + _linkNo })[0]['idIndex'],
-                "target": _.filter(nodesMap, { 'name': link[seriesNameArray[c + 1]] + '_' + (Number(_linkNo) + 1) })[0]['idIndex'],
-                "value": link.total,
+                "source": _currentSource,
+                "target": _currentTarget,
+                "value": (link[seriesNameArray[c]]) === "NA" || (link[seriesNameArray[c + 1]]) === "NA" ? 0 : link.total,
                 "id": _linkId
               };
               if (nodeColorMap[link[seriesNameArray[c]]]) {
@@ -427,6 +430,11 @@
               return "hidden"
             }
           })
+          .attr("class", d => {
+            if (d.value === 0) {
+              return "hidden"
+            }
+          })
           .attr('stroke', '#808080')
           .attr("fill", d => {
             if (d.color) {
@@ -496,6 +504,11 @@
           .enter().append("foreignObject")
           .attr("class", d => {
             if (d.name === "NA") {
+              return "hidden"
+            }
+          })
+          .attr("class", d => {
+            if (d.value === 0) { //hide node if value is 0
               return "hidden"
             }
           })
