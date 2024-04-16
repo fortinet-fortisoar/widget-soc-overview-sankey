@@ -183,7 +183,7 @@
         //create nodeColorMap to create set of colors for related nodes 
         dataToPlot.forEach((item, index) => {
           for (let c = 0; c < seriesNameArray.length; c++) {
-            if (item['color_' + seriesNameArray[c]] !== 'NA') {
+            if (item['color_' + seriesNameArray[c]] !== undefined && item['color_' + seriesNameArray[c]] !== 'NA') {
               nodeColorMap[item[seriesNameArray[c]]] = item['color_' + seriesNameArray[c]]; //add picklist color to nodes and links
             }
             else {
@@ -193,7 +193,7 @@
         });
         nodes.forEach(node => {
           if (nodeColorMap[node.name]) {
-            node.color = nodeColorMap[node.name];
+            node['color'] = nodeColorMap[node.name];
           }
         });
         const additionalId = 2200000000; // to create additional id for null values
@@ -247,7 +247,7 @@
                 "id": _linkId
               };
               if (nodeColorMap[link[seriesNameArray[c]]]) {
-                linkData.color = nodeColorMap[link[seriesNameArray[c + 1]]];
+                linkData['color'] = nodeColorMap[link[seriesNameArray[c + 1]]];
               }
               links.push(linkData);
               _linkId++;

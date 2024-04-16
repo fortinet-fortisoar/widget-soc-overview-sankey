@@ -83,7 +83,7 @@
                       queryObject.aggregates.push({
                           'operator': 'groupby',
                           'alias': 'series_' + elementIndex,
-                          'field': currentLayer['sourceNodesField']
+                          'field': config['sourceNodeType'] === 'picklist' ? currentLayer['sourceNodesField'] + '.itemValue' : currentLayer['sourceNodesField'] // picklist check added in source node 
                       });
                       if (currentLayer['targetNodeSubField'] === null) {
                           elementIndex++;

@@ -124,7 +124,7 @@
           $scope.params.formFields = entity.getFormFields();
           $scope.params.relationshipFieldsArray = entity.getRelationshipFieldsArray();
           $scope.params.sourceNodeFields = _.filter($scope.params['formFields'], function (field) {
-            return field.type === 'text';
+            return field.type === 'text' || field.type === 'picklist';
           });
           $scope.params.selectedTargetNodeFields = _.filter($scope.params['formFields'], function (field) {
             return field.type === 'text' || field.type === 'picklist' || field.type === 'manyToMany';
@@ -249,6 +249,7 @@
       }
   
       function save() {
+        checkResourceType();
         if (!$scope.editSankeyWidgetForm.$valid) {
           $scope.editSankeyWidgetForm.$setTouched();
           $scope.editSankeyWidgetForm.$focusOnFirstError();
@@ -257,6 +258,16 @@
         $uibModalInstance.close($scope.config);
       }
   
+      //save and use the source type for payload changes
+      function checkResourceType() {
+        var _sourceType = _.filter($scope.params['formFields'], function (field) {
+           if(field.name === $scope.config.layers[0].sourceNodesField){
+             return field.type;
+           }
+         });
+         $scope.config['sourceNodeType'] = _sourceType[0].type;
+      }
+
       function init() {
         _handleTranslations();
       }
