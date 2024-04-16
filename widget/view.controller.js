@@ -417,6 +417,7 @@
           .text(d => d.name);
   
         // Rendering Nodes
+        // hidden class added to nodes with name 'NA' and value 0 as we don't want to render nodes with null values
         svg.append("g")
           .selectAll("rect")
           .data(nodes)
@@ -427,7 +428,7 @@
           .attr("width", d => d.x1 - d.x0)
           .attr("class", d => {
             if (d.name === "NA") {
-              return "hidden"
+              return "hidden" 
             }
           })
           .attr("class", d => {
@@ -474,6 +475,7 @@
   
   
         // Rendering Links
+        // hidden class added to links with name 'NA' and value 0 as we don't want to render links connected to null values
         const link = svg.append("g")
           .attr("fill", "none")
           .attr("stroke-opacity", 1) // 0.8
@@ -497,6 +499,7 @@
           .text(d => `${d.source.name} → ${d.target.name}\n${d.value}`);
   
         // Node text and value rendering
+        // hidden class added to text with name 'NA' and value 0 as we don't want to render text for null values
         svg.append("g")
           .style("font", "11px sans-serif")
           .selectAll("text")
