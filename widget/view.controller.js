@@ -106,6 +106,13 @@
               _seriesNo = i;
               _linkNo = i;
               if(result[i]['data'] && result[i]['data']['hydra:member']){
+                if(result[i]['data']['hydra:member'].length === 0){
+                  errorMessage = $scope.viewWidgetVars.MESSAGE_NO_RECORDS_FOUND;
+                  renderNoRecordMessage();
+                }
+                else{
+
+                }
                 createDataToPlot(result[i]['data']['hydra:member']);
               }
             }

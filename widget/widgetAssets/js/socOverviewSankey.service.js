@@ -107,7 +107,7 @@
                               queryObject.aggregates.push({
                                   'operator': 'groupby',
                                   'alias': 'series_' + elementIndex,
-                                  'field': previousLayer['targetNodeSubType'] === 'picklist' || previousLayer['targetNodeSubType'] === 'manyToMany' ? previousLayer['targetNodeSubField'] + '.itemValue' : previousLayer['targetNodeSubField']
+                                  'field': previousLayer['targetNodeSubType'] === 'picklist' ? previousLayer['targetNodeSubField'] + '.itemValue' : previousLayer['targetNodeSubField']
                               });
                           }
                           else {
@@ -146,9 +146,9 @@
               queryObject.aggregates.push({
                   'operator': 'groupby',
                   'alias': 'series_' + elementIndex,
-                  'field': currentLayer['targetNodeType'] === 'picklist' || currentLayer['targetNodeType'] === 'manyToMany' ? currentLayer['targetNodeField'] + '.itemValue' : currentLayer['targetNodeField']
+                  'field': currentLayer['targetNodeType'] === 'picklist'? currentLayer['targetNodeField'] + '.itemValue' : currentLayer['targetNodeField']
               });
-              if (currentLayer['targetNodeType'] === 'picklist' || currentLayer['targetNodeType'] === 'manyToMany') {
+              if (currentLayer['targetNodeType'] === 'picklist') {
                   queryObject.aggregates.push({
                       'operator': 'groupby',
                       'alias': 'color_series_' + elementIndex,
@@ -165,7 +165,7 @@
                   'alias': 'series_' + elementIndex,
                   'field': _fieldCondition
               });
-              if (currentLayer['targetNodeSubType'] === 'picklist' || currentLayer['targetNodeSubType'] === 'manyToMany') {
+              if (currentLayer['targetNodeSubType'] === 'picklist') {
                   queryObject.aggregates.push({
                       'operator': 'groupby',
                       'alias': 'color_series_' + elementIndex,
@@ -177,7 +177,7 @@
           //the condition of field is updated if the resource selected on each layer is different or similar
           function getSubTargetFieldCondition(_resource, currentLayer) {
               let _fieldCondition = currentLayer['targetNodeSubField'];
-              if(currentLayer['targetNodeSubType'] === 'picklist' || currentLayer['targetNodeSubType'] === 'manyToMany')
+              if(currentLayer['targetNodeSubType'] === 'picklist')
               {
                   if(!_resource || _resource === currentLayer['targetNodeModule']){
                       _fieldCondition = currentLayer['targetNodeSubField'] + '.itemValue';
