@@ -175,7 +175,7 @@
         let _currentTargetData = _.filter($scope.params.targetNodeFields, function (field) {
           return field.name === $scope.config.layers[_index].targetNodeField
         });
-        if (_currentTargetData && _currentTargetData.length > 0 && (_currentTargetData[0]['type'] === 'manyToMany') {
+        if (_currentTargetData && _currentTargetData.length > 0 && (_currentTargetData[0]['type'] === 'manyToMany')) {
           var targetEntity = new Entity(_currentTargetData[0]['module']);
           targetEntity.loadFields().then(function () {
             $scope.params.targetFormField = targetEntity.getFormFieldsArray();
