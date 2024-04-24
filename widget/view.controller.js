@@ -111,9 +111,8 @@
                   renderNoRecordMessage();
                 }
                 else{
-
+                  createDataToPlot(result[i]['data']['hydra:member']);
                 }
-                createDataToPlot(result[i]['data']['hydra:member']);
               }
             }
             onCompleteRender();
@@ -139,6 +138,7 @@
           if (pagedTotalData.fieldRows.length === 0) {
             errorMessage = $scope.viewWidgetVars.MESSAGE_NO_RECORDS_FOUND;
             renderNoRecordMessage();
+            $scope.processing = false;
             return;
           }
           var data = pagedTotalData.fieldRows[0][$scope.config.customModuleField].value;

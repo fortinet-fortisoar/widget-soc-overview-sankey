@@ -268,7 +268,9 @@
       }
   
       function save() {
-        checkResourceType();
+        if($scope.config.moduleType === 'Across Modules'){
+        	checkResourceType();    
+        }
         if (!$scope.editSankeyWidgetForm.$valid) {
           $scope.editSankeyWidgetForm.$setTouched();
           $scope.editSankeyWidgetForm.$focusOnFirstError();
