@@ -9,9 +9,9 @@
           .module('cybersponse')
           .factory('socOverviewSankeyService', socOverviewSankeyService);
   
-      socOverviewSankeyService.$inject = ['$q', '$http', 'currentDateMinusService', 'Query', 'API'];
+      socOverviewSankeyService.$inject = ['$q', '$http', 'currentDateMinusService', 'Query', 'API', 'Entity'];
   
-      function socOverviewSankeyService($q, $http, currentDateMinusService, Query, API) {
+      function socOverviewSankeyService($q, $http, currentDateMinusService, Query, API, Entity) {
           var service;
           var config;
   
@@ -41,22 +41,6 @@
               var duration = _duration;
               var recordSize = config.recordSize;
               var defer = $q.defer();
-              var dataFilters = getFilters(duration);
-              var queryObject = {
-                  sort: [{
-                      field: 'total',
-                      direction: 'DESC'
-                  }],
-                  aggregates: [
-                      {
-                          'operator': 'count',
-                          'field': '*',
-                          'alias': 'total'
-                      }
-                  ],
-                  relationship: true,
-                  filters: [dataFilters]
-              };
               var elementIndex = 0;
               var _resource = config.resource;
               var _allQuery = [];
@@ -74,8 +58,7 @@
                               'alias': 'total'
                           }
                       ],
-                      relationship: true,
-                      filters: [dataFilters]
+                      relationship: true
                   };
                   let currentLayer = config.layers[i];
                   //if - else to check if it is the 1st layer or not
@@ -100,7 +83,6 @@
                           if (previousLayer['targetNodeType'] === 'manyToMany') {
                               _resource = previousLayer['targetNodeModule'];
                           }
-                          let _fieldCondition = getSubTargetFieldCondition(_resource,previousLayer);
                           //if targetSubfield is not null then use targetNodeSubfield 
                           //else use target node
                           if (previousLayer['targetNodeSubField'] !== null) {
@@ -121,7 +103,8 @@
                           pushTargetSubNodes(queryObject, elementIndex, currentLayer, _resource);
                       }
                   }
-  
+                  var dataFilters = getFilters(duration, _resource);
+                  queryObject["filters"] = [dataFilters];
                   var _queryObj = new Query(queryObject);
                   _allQuery.push(
                       $http.post(API.QUERY + _resource + '?$limit=' + recordSize, _queryObj.getQuery(true)).then(function (response) {
@@ -146,7 +129,7 @@
               queryObject.aggregates.push({
                   'operator': 'groupby',
                   'alias': 'series_' + elementIndex,
-                  'field': currentLayer['targetNodeType'] === 'picklist'? currentLayer['targetNodeField'] + '.itemValue' : currentLayer['targetNodeField']
+                  'field': currentLayer['targetNodeType'] === 'picklist' ? currentLayer['targetNodeField'] + '.itemValue' : currentLayer['targetNodeField']
               });
               if (currentLayer['targetNodeType'] === 'picklist') {
                   queryObject.aggregates.push({
@@ -159,7 +142,7 @@
   
           // push sub target nodes if target node is manyToMany and sub field is selected
           function pushTargetSubNodes(queryObject, elementIndex, currentLayer, _resource) {
-              let _fieldCondition = getSubTargetFieldCondition(_resource,currentLayer);
+              let _fieldCondition = getSubTargetFieldCondition(_resource, currentLayer);
               queryObject.aggregates.push({
                   'operator': 'groupby',
                   'alias': 'series_' + elementIndex,
@@ -177,17 +160,16 @@
           //the condition of field is updated if the resource selected on each layer is different or similar
           function getSubTargetFieldCondition(_resource, currentLayer) {
               let _fieldCondition = currentLayer['targetNodeSubField'];
-              if(currentLayer['targetNodeSubType'] === 'picklist')
-              {
-                  if(!_resource || _resource === currentLayer['targetNodeModule']){
+              if (currentLayer['targetNodeSubType'] === 'picklist') {
+                  if (!_resource || _resource === currentLayer['targetNodeModule']) {
                       _fieldCondition = currentLayer['targetNodeSubField'] + '.itemValue';
                   }
-                  else{
+                  else {
                       _fieldCondition = currentLayer['targetNodeField'] + '.' + currentLayer['targetNodeSubField'] + '.itemValue';
-                  }  
-              }    
-              else{
-                  if(_resource !== currentLayer['targetNodeModule']){
+                  }
+              }
+              else {
+                  if (_resource !== currentLayer['targetNodeModule']) {
                       _fieldCondition = currentLayer['targetNodeField'] + '.' + currentLayer['targetNodeSubField'];
                   }
               }
@@ -195,10 +177,11 @@
           }
   
   
-          function getFilters(duration) {
+          function getFilters(duration, _resource) {
               let frontFilter = {};
               frontFilter.logic = 'AND';
-              if (config.entityTrackable) {
+              let isEntityTrackable = checkIfEntityIsTrackable(_resource);
+              if (isEntityTrackable) {
                   frontFilter.filters = [{
                       field: 'createDate',
                       operator: 'gte',
@@ -248,6 +231,15 @@
   
               // Convert Set to array and return
               return Array.from(keys);
+          }
+  
+          function checkIfEntityIsTrackable(_entity) {
+              var isTrackable = false;
+              var entity = new Entity(_entity);
+              entity.loadFields().then(function () {
+                  isTrackable = entity.trackable;
+              });
+              return isTrackable;
           }
   
           return service;

@@ -17,6 +17,7 @@
       $scope.params = {};
       $scope.jsonObjModuleList = [];
       $scope.loadAttributesForCustomModule = loadAttributesForCustomModule;
+      $scope.config.moduleType = $scope.config.moduleType ? $scope.config.moduleType : 'Across Modules';
       $scope.onChangeModuleType = onChangeModuleType;
       $scope.fetchAttributes = fetchAttributes;
       $scope.changeAttribute = changeAttribute;
@@ -36,26 +37,6 @@
         'name':'ALL RECORDS', 
         'value':ALL_RECORDS_SIZE
       }];
-      if(!$scope.config.hasOwnProperty("moduleType")){
-        $scope.config.moduleType = "Single Module";
-        $scope.config.customModule = "keys";
-        $scope.config.query =  {
-              "sort": [],
-              "limit": 30,
-              "logic": "AND",
-              "filters": [
-                {
-                  "field": "key",
-                  "operator": "eq",
-                  "_operator": "eq",
-                  "value": "widget sankey sample data",
-                  "type": "primitive"
-                }
-    			]
-  		}
-        $scope.config.title =  "Default Sankey";
-  		  $scope.config.customModuleField = "jSONValue";
-      }
       if ($scope.config.layers.length === 0) {
          insertLayerObject();
       }
@@ -281,7 +262,7 @@
   
       //save and use the source type for payload changes
       function checkResourceType() {
-        var _sourceType = _.filter($scope.params['formFields'], function (field) {
+        var _sourceType = _.filter($scope.params['formFields0'], function (field) {
            if(field.name === $scope.config.layers[0].sourceNodesField){
              return field.type;
            }
