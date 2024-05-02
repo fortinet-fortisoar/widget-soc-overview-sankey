@@ -19,7 +19,8 @@
               getResourceAggregate: getResourceAggregate,
               loadJs: loadJs,
               getRandomDarkColor: getRandomDarkColor,
-              fetchKeysWithPattern: fetchKeysWithPattern
+              fetchKeysWithPattern: fetchKeysWithPattern,
+              hasNonZeroValue: hasNonZeroValue
           };
   
           // Load External JS Files
@@ -45,7 +46,7 @@
               var _resource = config.resource;
               var _allQuery = [];
               var previousLayer = null;
-              for (var i = 0; i < config.layers.length; i++) {
+              for (var id = 0; id < config.layers.length; id++) {
                   var queryObject = {
                       sort: [{
                           field: 'total',
@@ -60,49 +61,25 @@
                       ],
                       relationship: true
                   };
-                  let currentLayer = config.layers[i];
-                  //if - else to check if it is the 1st layer or not
-                  if (currentLayer['sourceNodesField'] && currentLayer['sourceNodesField'] !== '') {
+                  let currentLayer = config.layers[id];
+                  _resource = currentLayer['sourceNodeModule'];
+                  //create aggregate for source
+                  if (currentLayer['sourceNodeModule']) {
                       queryObject.aggregates.push({
                           'operator': 'groupby',
-                          'alias': 'series_' + elementIndex,
-                          'field': config['sourceNodeType'] === 'picklist' ? currentLayer['sourceNodesField'] + '.itemValue' : currentLayer['sourceNodesField'] // picklist check added in source node 
+                          'alias': 'series_' + id,
+                          'field': currentLayer['sourceNodeType'] === 'picklist' ? currentLayer['sourceNode'] + '.itemValue' : currentLayer['sourceNode'] // picklist check added in source node 
                       });
-                      if (currentLayer['targetNodeSubField'] === null) {
-                          elementIndex++;
-                          pushTargetNodes(queryObject, elementIndex, currentLayer);
-                      } else {
-                          elementIndex++;
-                          pushTargetSubNodes(queryObject, elementIndex, currentLayer);
-                      }
+                      elementIndex++;
+                  }
+                  //create aggregate for target
+                  if (currentLayer['targetNodeField'] === null) {
+                      pushTarget(queryObject, elementIndex, currentLayer);
                   }
                   else {
-                      //if the layers are other than 1st layer than API call need to be made as per the target node type of previous layer
-                      if (previousLayer) {
-                          //update resource for the next layers
-                          if (previousLayer['targetNodeType'] === 'manyToMany') {
-                              _resource = previousLayer['targetNodeModule'];
-                          }
-                          //if targetSubfield is not null then use targetNodeSubfield 
-                          //else use target node
-                          if (previousLayer['targetNodeSubField'] !== null) {
-                              queryObject.aggregates.push({
-                                  'operator': 'groupby',
-                                  'alias': 'series_' + elementIndex,
-                                  'field': previousLayer['targetNodeSubType'] === 'picklist' ? previousLayer['targetNodeSubField'] + '.itemValue' : previousLayer['targetNodeSubField']
-                              });
-                          }
-                          else {
-                              pushTargetNodes(queryObject, elementIndex, previousLayer, _resource);
-                          }
-                      }
-                      elementIndex++;
-                      if (currentLayer['targetNodeSubField'] === null) {
-                          pushTargetNodes(queryObject, elementIndex, currentLayer, _resource);
-                      } else {
-                          pushTargetSubNodes(queryObject, elementIndex, currentLayer, _resource);
-                      }
+                      pushTargetField(queryObject, elementIndex, currentLayer);
                   }
+  
                   var dataFilters = getFilters(duration, _resource);
                   queryObject["filters"] = [dataFilters];
                   var _queryObj = new Query(queryObject);
@@ -125,57 +102,36 @@
           }
   
           // push target nodes if target node is selected and doesnt have sub field selected
-          function pushTargetNodes(queryObject, elementIndex, currentLayer, _resource) {
+          function pushTarget(queryObject, elementIndex, currentLayer) {
               queryObject.aggregates.push({
                   'operator': 'groupby',
                   'alias': 'series_' + elementIndex,
-                  'field': currentLayer['targetNodeType'] === 'picklist' ? currentLayer['targetNodeField'] + '.itemValue' : currentLayer['targetNodeField']
+                  'field': currentLayer['targetNodeType'] === 'picklist' ? currentLayer['targetNode'] + '.itemValue' : currentLayer['targetNode']
               });
               if (currentLayer['targetNodeType'] === 'picklist') {
                   queryObject.aggregates.push({
                       'operator': 'groupby',
                       'alias': 'color_series_' + elementIndex,
-                      'field': currentLayer['targetNodeField'] + '.color'
+                      'field': currentLayer['targetNode'] + '.color'
                   });
               }
           }
   
           // push sub target nodes if target node is manyToMany and sub field is selected
-          function pushTargetSubNodes(queryObject, elementIndex, currentLayer, _resource) {
-              let _fieldCondition = getSubTargetFieldCondition(_resource, currentLayer);
+          function pushTargetField(queryObject, elementIndex, currentLayer) {
               queryObject.aggregates.push({
                   'operator': 'groupby',
                   'alias': 'series_' + elementIndex,
-                  'field': _fieldCondition
+                  'field': currentLayer['targetNodeFieldType'] === 'picklist' ? currentLayer['targetNode'] + '.' + currentLayer['targetNodeField'] + '.itemValue' : currentLayer['targetNode'] + '.' + currentLayer['targetNodeField']
               });
-              if (currentLayer['targetNodeSubType'] === 'picklist') {
+              if (currentLayer['targetNodeFieldType'] === 'picklist') {
                   queryObject.aggregates.push({
                       'operator': 'groupby',
                       'alias': 'color_series_' + elementIndex,
-                      'field': currentLayer['targetNodeField'] + '.' + currentLayer['targetNodeSubField'] + '.color'
+                      'field': currentLayer['targetNode'] + '.' + currentLayer['targetNodeField'] + '.color'
                   });
               }
           }
-  
-          //the condition of field is updated if the resource selected on each layer is different or similar
-          function getSubTargetFieldCondition(_resource, currentLayer) {
-              let _fieldCondition = currentLayer['targetNodeSubField'];
-              if (currentLayer['targetNodeSubType'] === 'picklist') {
-                  if (!_resource || _resource === currentLayer['targetNodeModule']) {
-                      _fieldCondition = currentLayer['targetNodeSubField'] + '.itemValue';
-                  }
-                  else {
-                      _fieldCondition = currentLayer['targetNodeField'] + '.' + currentLayer['targetNodeSubField'] + '.itemValue';
-                  }
-              }
-              else {
-                  if (_resource !== currentLayer['targetNodeModule']) {
-                      _fieldCondition = currentLayer['targetNodeField'] + '.' + currentLayer['targetNodeSubField'];
-                  }
-              }
-              return _fieldCondition;
-          }
-  
   
           function getFilters(duration, _resource) {
               let frontFilter = {};
@@ -242,6 +198,10 @@
               return isTrackable;
           }
   
+          // Function to check if any value in the array is not zero
+          function hasNonZeroValue(arr) {
+              return arr.some(obj => obj.value !== 0);
+          }
           return service;
       }
   })();

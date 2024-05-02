@@ -299,7 +299,7 @@
           }
         }
   
-        if (nodes.length > 0 && links.length > 0) {
+        if (nodes.length > 0 && links.length > 0 &&  (socOverviewSankeyService.hasNonZeroValue(links))) {
           chartData.nodes = nodes;
           chartData.links = links;
           renderSankeyChart();

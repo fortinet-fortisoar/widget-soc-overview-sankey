@@ -142,40 +142,40 @@
             <label for="sourceNodesField-{{$index}}" class="control-label">{{viewWidgetVars.LABEL_SOURCE_NODE}}<span class="text-danger">*</span></label>
             <select name="sourceNodesField-{{$index}}" id="sourceNodesField-{{$index}}" class="form-control"
               data-ng-options="field.name as field.title for field in params.sourceNodeFields"
-              data-ng-model="item.sourceNodesField" required data-ng-if="$first">
+              data-ng-model="item.sourceNode" required data-ng-if="$first">
               <option value="">{{viewWidgetVars.LABEL_SELECT_SOURCE_NODE}}</option>
             </select>
             <div data-cs-messages="editSankeyWidgetForm['sourceNodesField-'+$index]" data-ng-if="$first"></div>
             <div data-ng-if="!$first">
               <label class="font-08em opacity-04">{{config.resource | uppercase}} -> <span
-                  data-ng-if="!(config.layers[$index - 1].targetNodeSubField)">{{config.layers[$index -
-                  1].targetNodeField | uppercase}}</span><span
-                  data-ng-if="config.layers[$index - 1].targetNodeSubField"> {{viewWidgetVars.MESSAGE_LINKED}} {{config.layers[$index -
-                  1].targetNodeField | uppercase}} -> {{config.layers[$index - 1].targetNodeSubField |
+                  data-ng-if="!(config.layers[$index - 1].targetNodeField)">{{config.layers[$index -
+                  1].targetNode | uppercase}}</span><span
+                  data-ng-if="config.layers[$index - 1].targetNodeField"> {{viewWidgetVars.MESSAGE_LINKED}} {{config.layers[$index -
+                  1].targetNode | uppercase}} -> {{config.layers[$index - 1].targetNodeField |
                   uppercase}}</span></label>
             </div>
           </div>
           <!-- Target Node -->
           <div class="form-group"
             data-ng-class="{ 'has-error': editSankeyWidgetForm['targetNodesField-'+ $index].$invalid && editSankeyWidgetForm['targetNodesField-'+ $index].$touched }"
-            data-ng-if="config.resource && params.targetNodeFields">
+            data-ng-if="config.resource && params['targetNodeFields_'+$index].length>0">
             <label for="targetNodesField-{{$index}}" class="control-label">{{viewWidgetVars.LABEL_TARGET_NODE}}<span class="text-danger">*</span></label>
             <select name="targetNodesField-{{$index}}" id="targetNodesField-{{$index}}" class="form-control"
-              data-ng-options="field.name as field.title for field in params.targetNodeFields"
-              data-ng-change="onChangeTarget($index)" data-ng-model="item.targetNodeField" required>
+              data-ng-options="field.name as field.title for field in params['targetNodeFields_'+$index]"
+              data-ng-change="onChangeTarget($index)" data-ng-model="item.targetNode" required>
               <option value="">{{viewWidgetVars.LABEL_SELECT_TARGET_NODE}}</option>
             </select>
             <div data-cs-messages="editSankeyWidgetForm['targetNodesField-'+$index]"></div>
           </div>
-          <!-- Target Node Picklist -->
+          <!-- Target Node Field -->
           <div class="form-group"
             data-ng-class="{ 'has-error': editSankeyWidgetForm['targetNodesSubField-'+ $index].$invalid && editSankeyWidgetForm['targetNodesSubField-'+ $index].$touched }"
-            data-ng-if="config.resource && params['targetNodesSubFields_'+$index].length>0 && item.targetNodeField">
+            data-ng-if="config.resource && params['targetNodesSubFields_'+$index].length>0 && item.targetNode">
             <label for="targetNodesSubFields-{{$index}}" class="control-label">{{viewWidgetVars.LABEL_TARGET_NODE_FIELD}}<span
                 class="text-danger">*</span></label>
             <select name="targetNodesSubFields-{{$index}}" id="targetNodesSubFields-{{$index}}" class="form-control"
               data-ng-options="field.name as field.title for field in params['targetNodesSubFields_'+$index]"
-              data-ng-model="item.targetNodeSubField" data-ng-change="addSubTargetType($index)" required>
+              data-ng-model="item.targetNodeField" data-ng-change="addSubTargetType($index)" required>
               <option value="">{{viewWidgetVars.LABEL_SELECT_PICKLIST}}</option>
             </select>
             <div data-cs-messages="editSankeyWidgetForm['targetNodesSubField-'+$index]"></div>
