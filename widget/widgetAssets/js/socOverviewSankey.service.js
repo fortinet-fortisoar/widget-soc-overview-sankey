@@ -70,6 +70,13 @@
                           'alias': 'series_' + id,
                           'field': currentLayer['sourceNodeType'] === 'picklist' ? currentLayer['sourceNode'] + '.itemValue' : currentLayer['sourceNode'] // picklist check added in source node 
                       });
+                      if (currentLayer['sourceNodeType'] === 'picklist') {
+                          queryObject.aggregates.push({
+                              'operator': 'groupby',
+                              'alias': 'color_series_' + id,
+                              'field': currentLayer['sourceNode'] + '.color'
+                          });
+                      }
                       elementIndex++;
                   }
                   //create aggregate for target

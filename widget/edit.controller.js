@@ -173,11 +173,8 @@
         $scope.config.layers[_index]['targetNodeSubField'] = null;
         $scope.config.layers[_index]['targetNodeField'] = null;
         $scope.config.layers[_index]['targetNodeFieldType'] = null;
-        emptyRemainingLayers(_index);
         populateTargetFields(_index);
-        if ($scope.config.layers[_index + 1] && $scope.config.layers[_index + 1]['sourceNodeModule']) {
-          getEntitiesOnTargetChange(_index); //get target entity for next layer if present
-        }
+        removeLayer(_index+1);
       }
   
       //populate Target Fields if Target type is manyToMany
