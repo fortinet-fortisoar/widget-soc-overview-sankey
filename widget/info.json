@@ -2,7 +2,7 @@
     "name": "socOverviewSankey",
     "title": "Sankey",
     "subTitle": "Visualise flow between nodes in a directed acyclic network.",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "published_date": 1714977808,
     "releaseNotes": "available",
     "metadata": {
@@ -12,11 +12,11 @@
             "Reports"
         ],
         "snapshots": [
-            "https://repo.fortisoar.fortinet.com/fsr-widgets/socOverviewSankey-2.1.0/images/soc-sankey-edit-live-data.png",
-            "https://repo.fortisoar.fortinet.com/fsr-widgets/socOverviewSankey-2.1.0/images/soc-sankey-edit-static-data.png",
-			"https://repo.fortisoar.fortinet.com/fsr-widgets/socOverviewSankey-2.1.0/images/soc-sankey-view.png"
+            "https://repo.fortisoar.fortinet.com/fsr-widgets/socOverviewSankey-2.1.1/images/soc-sankey-edit-live-data.png",
+            "https://repo.fortisoar.fortinet.com/fsr-widgets/socOverviewSankey-2.1.1/images/soc-sankey-edit-static-data.png",
+			"https://repo.fortisoar.fortinet.com/fsr-widgets/socOverviewSankey-2.1.1/images/soc-sankey-view.png"
         ],
-        "help_online":"https://github.com/fortinet-fortisoar/widget-soc-overview-sankey/blob/release/2.1.0/README.md",
+        "help_online":"https://github.com/fortinet-fortisoar/widget-soc-overview-sankey/blob/release/2.1.1/README.md",
         "certified": "No",
         "publisher": "Fortinet",
         "compatibility": [

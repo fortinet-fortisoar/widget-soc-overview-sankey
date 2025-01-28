@@ -6,11 +6,11 @@
   (function () {
     angular
       .module('cybersponse')
-      .controller('editSocOverviewSankey210Ctrl', editSocOverviewSankey210Ctrl);
+      .controller('editSocOverviewSankey211Ctrl', editSocOverviewSankey211Ctrl);
   
-    editSocOverviewSankey210Ctrl.$inject = ['$scope', '$uibModalInstance', 'config', 'appModulesService', 'Entity', 'modelMetadatasService', 'widgetUtilityService', '$timeout', '$filter', 'ALL_RECORDS_SIZE', '$q'];
+    editSocOverviewSankey211Ctrl.$inject = ['$scope', '$uibModalInstance', 'config', 'appModulesService', 'Entity', 'modelMetadatasService', 'widgetUtilityService', '$timeout', '$filter', 'ALL_RECORDS_SIZE', '$q'];
   
-    function editSocOverviewSankey210Ctrl($scope, $uibModalInstance, config, appModulesService, Entity, modelMetadatasService, widgetUtilityService, $timeout, $filter, ALL_RECORDS_SIZE, $q) {
+    function editSocOverviewSankey211Ctrl($scope, $uibModalInstance, config, appModulesService, Entity, modelMetadatasService, widgetUtilityService, $timeout, $filter, ALL_RECORDS_SIZE, $q) {
       $scope.cancel = cancel;
       $scope.save = save;
       $scope.config = config;

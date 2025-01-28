@@ -6,11 +6,11 @@
   (function () {
     angular
       .module('cybersponse')
-      .controller('socOverviewSankey210Ctrl', socOverviewSankey210Ctrl);
+      .controller('socOverviewSankey211Ctrl', socOverviewSankey211Ctrl);
   
-    socOverviewSankey210Ctrl.$inject = ['$scope', '$rootScope', 'config', '_', 'PagedCollection', 'widgetUtilityService', 'socOverviewSankeyService'];
+    socOverviewSankey211Ctrl.$inject = ['$scope', '$rootScope', 'config', '_', 'PagedCollection', 'widgetUtilityService', 'socOverviewSankeyService'];
   
-    function socOverviewSankey210Ctrl($scope, $rootScope, config, _, PagedCollection, widgetUtilityService, socOverviewSankeyService) {
+    function socOverviewSankey211Ctrl($scope, $rootScope, config, _, PagedCollection, widgetUtilityService, socOverviewSankeyService) {
   
       var sankey;
       var chartData = {};
@@ -58,6 +58,10 @@
       function _init() {
         $scope.processing = true;
         _handleTranslations();
+        let loader = window.AMDLoader; // copied the amd loader properties 
+        let define = window.define;
+        window.AMDLoader = {};
+        window.define = {};
         socOverviewSankeyService.loadJs('https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.12.3/d3-sankey.min.js').then(function () {
           if ($scope.config.moduleType === 'Across Modules') { //across module to fetch live data
             refreshSankey(90, 'btn-6m');
@@ -66,6 +70,11 @@
             cleanChartData();
             populateCustomData();
           }
+          //assigned the loader properties for amd loader once the d3-sankey.min.js is loaded 
+          $timeout(function(){
+            window.AMDLoader = loader;
+            window.define = define;
+          },5000)
         });
       }
   
